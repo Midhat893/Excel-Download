@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel, QVBoxLayout, 
-QPushButton, QFileDialog)
+QPushButton, QFileDialog, QTabWidget)
 from PyQt6.QtCore import QSize, Qt
 
 class MainWindow(QMainWindow):
@@ -8,19 +8,30 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Excel-Downloader")
         self.setFixedSize(QSize(400,300))
-        self.set_excel_uploader()
-
-    def set_excel_uploader(self):
-        layout = QVBoxLayout()
-        title = QLabel("Download Excel Sheets In a Go")
-        layout.addWidget(title)
-
-        button = QPushButton("Upload Excel")
-        button.clicked.connect(self.handle_file_upload)
-        layout.addWidget(button)
 
         container = QWidget()
-        container.setLayout(layout)
+        main_layout = QVBoxLayout()
+
+        self.title = QLabel("Download Excel Sheets In a Go")
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.title.setStyleSheet("font-size: 24px; font-weight: bold;")
+        main_layout.addWidget(self.title)
+
+        self.tabs = QTabWidget()
+        self.welcome_tab  = QWidget()
+        self.name_tab = QWidget()
+        self.comment_tab = QWidget()
+
+        self.tabs.addTab(self.welcome_tab, "Welcome Page")
+        self.tabs.addTab(self.name_tab, "Name")
+        self.tabs.addTab(self.comment_tab, "Comment")
+        main_layout.addWidget(self.tabs)
+
+        self.upload_button = QPushButton("Upload Excel")
+        self.upload_button.clicked.connect(self.handle_file_upload)
+        main_layout.addWidget(self.upload_button)
+        
+        container.setLayout(main_layout)
         self.setCentralWidget(container)
 
     def handle_file_upload(self):
